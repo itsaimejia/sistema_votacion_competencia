@@ -18,11 +18,12 @@ root.grid_columnconfigure(1,weight=1)
 root.grid_columnconfigure(2,weight=1)
 root.grid_rowconfigure(0,weight=1)
 root.grid_rowconfigure(1,weight=1)
-root.grid_rowconfigure(2,weight=1)
+root.grid_rowconfigure(2,weight=1)\
+
 #imagenes 
 luz_verde = tkinter.PhotoImage(file='verde.png')
-luz_roja = tkinter.PhotoImage(file='rojo.png')
-luz_blanca = tkinter.PhotoImage(file='blanco.png')
+luz_rojo = tkinter.PhotoImage(file='rojo.png')
+luz_blanco = tkinter.PhotoImage(file='blanco.png')
 fondo_negro=tkinter.PhotoImage(file='negro.png')
 
 
@@ -39,9 +40,9 @@ lblJuez3=Label(root,image=fondo_negro,bg="black")
 lblJuez3.grid(row=2, column=2, sticky='NSEW')
 
 def actualizarLuces():
-    lblJuez1.config(image=luz_verde,bg="black")
-    lblJuez2.config(image=luz_verde,bg="black")
-    lblJuez3.config(image=luz_verde,bg="black")
+    lblJuez1.config(image=luz_rojo,bg="black")
+    lblJuez2.config(image=luz_blanco,bg="black")
+    lblJuez3.config(image=luz_blanco,bg="black")
 
 def submit():
     temp = 2
