@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import PhotoImage
 from PIL import Image,ImageTk
 import tkinter
-import pyglet
+import lib_arduino as lard
 import pygame
 
 pygame.mixer.init()
@@ -27,10 +27,13 @@ luz_blanco = tkinter.PhotoImage(file='blanco.png')
 fondo_negro=tkinter.PhotoImage(file='negro.png')
 
 
-Label(root,text="Tiempo",font="digital-7 60",fg="red",bg="black").grid(row=0, column=0, columnspan=3, sticky='NSEW')
+Label(root,text="Tiempo",font="digital-7 90",fg="red",bg="black").grid(row=0, column=1, sticky='NSEW')
+lblTiempo=tkinter.Label(root,text="60",font="digital-7 130",fg="green",bg="black")
+lblTiempo.grid(row=1, column=1, sticky='NSEW')
 
-lblTiempo=tkinter.Label(root,text="60",font="digital-7 120",fg="green",bg="black")
-lblTiempo.grid(row=1, column=0, columnspan=3, sticky='NSEW')
+Label(root,text="Distancia", font="digital-7 45",fg="yellow",bg="black").grid(row=0, column=2, sticky='NSEW')
+lblDistancia=tkinter.Label(root,text="0.0",font="digital-7 65",fg="blue",bg="black")
+lblDistancia.grid(row=1, column=2, sticky='NSEW')
 
 lblJuez1=Label(root,image=fondo_negro,bg="black")
 lblJuez1.grid(row=2, column=0, sticky='NSEW')
@@ -44,16 +47,24 @@ def actualizarLuces():
     lblJuez2.config(image=luz_blanco,bg="black")
     lblJuez3.config(image=luz_blanco,bg="black")
 
+def updateDistancia(lista):
+    var = min(lista)
+    lblDistancia.configure(text=("{0}".format(round(var,1))))
+
 def submit():
-    temp = 2
+    temp = 60
+    listaDistancias = []
     while temp >= 0:
         
         
         lblTiempo.configure(text=("{0}".format(temp)))
         root.update()
         temp -= 1
+        listaDistancias.append(lard.getDistancia())
         time.sleep(1)
         if temp == 0:
+            print(listaDistancias)
+            updateDistancia(listaDistancias)
             actualizarLuces()
         
     
