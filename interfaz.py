@@ -18,7 +18,7 @@ root.grid_columnconfigure(1,weight=1)
 root.grid_columnconfigure(2,weight=1)
 root.grid_rowconfigure(0,weight=1)
 root.grid_rowconfigure(1,weight=1)
-root.grid_rowconfigure(2,weight=1)\
+root.grid_rowconfigure(2,weight=1)
 
 #imagenes 
 luz_verde = tkinter.PhotoImage(file='verde.png')
