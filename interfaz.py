@@ -92,7 +92,7 @@ def desicionesJueces():
         contadorDes += 1
 
 def cronometro():
-    tiempoCronometro = 10
+    tiempoCronometro = 60
     listaDistancias = []
     while tiempoCronometro >= 0:
         lblTiempo.configure(text=("{0}".format(tiempoCronometro)))
