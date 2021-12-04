@@ -5,13 +5,8 @@ import tkinter
 import pygame
 import threading as tr
 import LibArduino as lard
+
 pygame.mixer.init()
-
-
-
-#variables globales
-isRun = True
-
 
 #configuracion ventana aplicacion
 root = Tk()
@@ -73,14 +68,14 @@ def updateDistancia(listaDistancias):
     lblDistancia.configure(text=("{0}".format(var)))
     
 def desicionesJueces():
-    desJuez1 = lard.getJuez2()
+    desJuez1 = lard.getJuez1()
     desJuez2 = lard.getJuez2()
-    desJuez3 = lard.getJuez2()
+    desJuez3 = lard.getJuez3()
     
     contadorDes = 0
-    if(desJuez1 == "ROJOJUEZ2"):
+    if(desJuez1 == "ROJOJUEZ1"):
         lblJuez1.config(image=imgLuzRoja,bg="black")
-    if(desJuez1 == "BLANCOJUEZ2"):
+    if(desJuez1 == "BLANCOJUEZ1"):
         lblJuez1.config(image=imgLuzBlanca,bg="black")
         contadorDes += 1
     
@@ -90,9 +85,9 @@ def desicionesJueces():
         lblJuez2.config(image=imgLuzBlanca,bg="black")
         contadorDes += 1
             
-    if(desJuez3 == "ROJOJUEZ2"):
+    if(desJuez3 == "ROJOJUEZ3"):
         lblJuez3.config(image=imgLuzRoja,bg="black")
-    if(desJuez3 == "BLANCOJUEZ2"):
+    if(desJuez3 == "BLANCOJUEZ3"):
         lblJuez3.config(image=imgLuzBlanca,bg="black")
         contadorDes += 1
 
@@ -104,12 +99,10 @@ def cronometro():
         root.update()
         
         listaDistancias.append(lard.getDistancia()) #conseguir lista de distancias
-        print(lard.getDistancia())
         
         tiempoCronometro -= 1
         time.sleep(1)
         if tiempoCronometro == 0:
-            print(listaDistancias)
             updateDistancia(listaDistancias)
             lucesVerdes()
             
@@ -124,9 +117,10 @@ hiloVotacion.start()
 
  
     
-    # pygame.mixer.music.load("chicharra-2-.mp3")
-    # pygame.mixer.music.play(loops=1)
-          
+# pygame.mixer.music.load("chicharra-2-.mp3")
+# pygame.mixer.music.play(loops=1)
+
+#boton para desencadenar pruebas (se borrara)
 btn = Button(root, text='Iniciar cuenta Regresiva', bd='5',
              command= resetPantalla,font="times 14 bold",fg="white",bg="black",borderwidth=0).grid(row=4, column=0, columnspan=3, sticky='NSEW')
 
