@@ -17,5 +17,5 @@ void loop(){
   tiempo = tiempo / 2;
   distancia = tiempo / 29;
   Serial.println(distancia);
-  delay(10);
+  delay(300);
 }

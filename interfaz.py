@@ -4,15 +4,13 @@ from tkinter import PhotoImage
 import tkinter
 import pygame
 import threading as tr
-import serial
+import LibArduino as lard
 pygame.mixer.init()
 
-arduinoSensorProx = serial.Serial("COM4",9600)
-arduinoJuez2 = serial.Serial("COM5",9600)
+
 
 #variables globales
 isRun = True
-listaDistancias = []
 
 
 #configuracion ventana aplicacion
@@ -57,6 +55,7 @@ def resetPantalla():
     lblJuez1.config(image=imgLuzNegra,bg="black")
     lblJuez2.config(image=imgLuzNegra,bg="black")
     lblJuez3.config(image=imgLuzNegra,bg="black")
+    lblDistancia.configure(text="0.0")
     cronometro()
     
     
@@ -66,39 +65,62 @@ def lucesVerdes():
     lblJuez2.config(image=imgLuzVerde,bg="black")
     lblJuez3.config(image=imgLuzVerde,bg="black")
 
-#conseguir lista de distancias
-def getDistancia():
-    aux = []
-    while isRun:
-        aux.append(float(arduinoSensorProx.readline().decode('ascii').strip()))
-    
-    global listaDistancias
-    listaDistancias = aux
+
 
 #actualizar label distancia (valor)
-def updateDistancia():
+def updateDistancia(listaDistancias):
     var = min(listaDistancias)
-    lblDistancia.configure(text=("{0}".format(round(var,1))))
+    lblDistancia.configure(text=("{0}".format(var)))
     
+def desicionesJueces():
+    desJuez1 = lard.getJuez2()
+    desJuez2 = lard.getJuez2()
+    desJuez3 = lard.getJuez2()
+    
+    contadorDes = 0
+    if(desJuez1 == "ROJOJUEZ2"):
+        lblJuez1.config(image=imgLuzRoja,bg="black")
+    if(desJuez1 == "BLANCOJUEZ2"):
+        lblJuez1.config(image=imgLuzBlanca,bg="black")
+        contadorDes += 1
+    
+    if(desJuez2 == "ROJOJUEZ2"):
+        lblJuez2.config(image=imgLuzRoja,bg="black")
+    if(desJuez2 == "BLANCOJUEZ2"):
+        lblJuez2.config(image=imgLuzBlanca,bg="black")
+        contadorDes += 1
+            
+    if(desJuez3 == "ROJOJUEZ2"):
+        lblJuez3.config(image=imgLuzRoja,bg="black")
+    if(desJuez3 == "BLANCOJUEZ2"):
+        lblJuez3.config(image=imgLuzBlanca,bg="black")
+        contadorDes += 1
+
 def cronometro():
-    temp = 5
-    while temp >= 0:
-        lblTiempo.configure(text=("{0}".format(temp)))
+    tiempoCronometro = 10
+    listaDistancias = []
+    while tiempoCronometro >= 0:
+        lblTiempo.configure(text=("{0}".format(tiempoCronometro)))
         root.update()
-        temp -= 1
+        
+        listaDistancias.append(lard.getDistancia()) #conseguir lista de distancias
+        print(lard.getDistancia())
+        
+        tiempoCronometro -= 1
         time.sleep(1)
-        if temp == 0:
-            global isRun
-            isRun = False
-            hiloSensorProx.join()
-            updateDistancia()
+        if tiempoCronometro == 0:
+            print(listaDistancias)
+            updateDistancia(listaDistancias)
             lucesVerdes()
+            
             
 #definicion hilos
 
 #hilo para el sensor de proximidad
-hiloSensorProx = tr.Thread(target=getDistancia)
-hiloSensorProx.start() 
+# hiloSensorProx = tr.Thread(target=getDistancia)
+# hiloSensorProx.start() 
+hiloVotacion = tr.Thread(target=desicionesJueces)
+hiloVotacion.start()
 
  
     
@@ -106,6 +128,6 @@ hiloSensorProx.start()
     # pygame.mixer.music.play(loops=1)
           
 btn = Button(root, text='Iniciar cuenta Regresiva', bd='5',
-             command= cronometro,font="times 14 bold",fg="white",bg="black",borderwidth=0).grid(row=4, column=0, columnspan=3, sticky='NSEW')
+             command= resetPantalla,font="times 14 bold",fg="white",bg="black",borderwidth=0).grid(row=4, column=0, columnspan=3, sticky='NSEW')
 
 root.mainloop()
