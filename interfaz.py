@@ -47,9 +47,7 @@ lblJuez3=Label(root,image=imgLuzNegra,bg="black")
 lblJuez3.grid(row=2, column=2, sticky='NSEW')
 
 def resetPantalla():
-    lblJuez1.config(image=imgLuzNegra,bg="black")
-    lblJuez2.config(image=imgLuzNegra,bg="black")
-    lblJuez3.config(image=imgLuzNegra,bg="black")
+    
     lblDistancia.configure(text="0.0")
     cronometro()
     
@@ -68,6 +66,10 @@ def updateDistancia(listaDistancias):
     lblDistancia.configure(text=("{0}".format(var)))
     
 def desicionesJueces():
+    lucesVerdes()
+    desJuez1 = ""
+    desJuez2 = ""
+    desJuez3 = ""
     desJuez1 = lard.getJuez1()
     desJuez2 = lard.getJuez2()
     desJuez3 = lard.getJuez3()
@@ -75,7 +77,7 @@ def desicionesJueces():
     contadorDes = 0
     if(desJuez1 == "ROJOJUEZ1"):
         lblJuez1.config(image=imgLuzRoja,bg="black")
-    if(desJuez1 == "BLANCOJUEZ1"):
+    elif(desJuez1 == "BLANCOJUEZ1"):
         lblJuez1.config(image=imgLuzBlanca,bg="black")
         contadorDes += 1
     
@@ -90,9 +92,13 @@ def desicionesJueces():
     if(desJuez3 == "BLANCOJUEZ3"):
         lblJuez3.config(image=imgLuzBlanca,bg="black")
         contadorDes += 1
+    
 
 def cronometro():
-    tiempoCronometro = 60
+    lblJuez1.config(image=imgLuzNegra,bg="black")
+    lblJuez2.config(image=imgLuzNegra,bg="black")
+    lblJuez3.config(image=imgLuzNegra,bg="black")
+    tiempoCronometro = 10
     listaDistancias = []
     while tiempoCronometro >= 0:
         lblTiempo.configure(text=("{0}".format(tiempoCronometro)))
@@ -105,6 +111,9 @@ def cronometro():
         if tiempoCronometro == 0:
             updateDistancia(listaDistancias)
             lucesVerdes()
+            hiloVotacion = tr.Thread(target=desicionesJueces)
+            hiloVotacion.start()
+            
             
             
 #definicion hilos
@@ -112,10 +121,9 @@ def cronometro():
 #hilo para el sensor de proximidad
 # hiloSensorProx = tr.Thread(target=getDistancia)
 # hiloSensorProx.start() 
-hiloVotacion = tr.Thread(target=desicionesJueces)
-hiloVotacion.start()
 
- 
+
+
     
 # pygame.mixer.music.load("chicharra-2-.mp3")
 # pygame.mixer.music.play(loops=1)
